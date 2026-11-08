@@ -56,27 +56,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }
 
-  async function createProfile(userId: string, email: string, fullName: string) {
-    const { error } = await supabase.from('profiles').insert({
-      id: userId,
-      email,
-      full_name: fullName,
-      role: 'customer',
-    });
-
-    if (error) {
-      console.error('Error creating profile:', error);
-      return;
-    }
-
-    await fetchProfile(userId);
-  }
-
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
       setUser(session?.user ?? null);
       if (session?.user) {
-        fetchProfile(session.user.id);
+        await fetchProfile(session.user.id);
       }
       setIsLoading(false);
     });
@@ -100,12 +84,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   async function signUp(email: string, password: string, fullName: string) {
-    const { data, error } = await supabase.auth.signUp({ email, password });
-    if (error) return { error };
-    if (data.user) {
-      await createProfile(data.user.id, email, fullName);
-    }
-    return { error: null };
+    // The profile row is created server-side by the on_auth_user_created trigger.
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: { data: { full_name: fullName } },
+    });
+    return { error };
   }
 
   async function signOut() {

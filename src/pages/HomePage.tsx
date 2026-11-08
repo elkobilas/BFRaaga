@@ -183,6 +183,8 @@ export function HomePage() {
     return () => clearInterval(timer);
   }, [heroSlides.length]);
 
+  const heroTiles = [...featuredProducts, ...newProducts].filter((p) => p.images?.length).slice(0, 4);
+
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -194,11 +196,12 @@ export function HomePage() {
   return (
     <div>
       {/* Hero */}
-      <section className={`${heroSlides[currentHero].bg} text-white py-16 md:py-24 transition-all duration-700`}>
-        <div className="page-container">
-          <div className="max-w-2xl">
-            <h1 className="text-3xl md:text-5xl font-bold mb-4 leading-tight">{heroSlides[currentHero].title}</h1>
-            <p className="text-lg md:text-xl text-white/80 mb-8">{heroSlides[currentHero].subtitle}</p>
+      <section className="relative bg-teal-800 text-white overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_85%_0%,rgba(242,176,30,0.22),transparent_55%)]" aria-hidden="true" />
+        <div className="page-container relative grid md:grid-cols-2 gap-12 items-center py-14 md:py-24">
+          <div>
+            <h1 className="font-display text-4xl md:text-6xl font-extrabold leading-[1.02] mb-5 text-balance">{heroSlides[currentHero].title}</h1>
+            <p className="text-lg text-white/80 mb-8 max-w-md">{heroSlides[currentHero].subtitle}</p>
             <div className="flex flex-wrap gap-3">
               <Link to="/search" className="btn-secondary text-base px-6 py-3">
                 {heroSlides[currentHero].cta}
@@ -208,17 +211,38 @@ export function HomePage() {
                 S'inscrire
               </Link>
             </div>
+            <div className="flex gap-2 mt-8">
+              {heroSlides.map((_, idx) => (
+                <button
+                  key={idx}
+                  aria-label={`Diapositive ${idx + 1}`}
+                  onClick={() => setCurrentHero(idx)}
+                  className={`w-3 h-3 rounded-full transition-all ${currentHero === idx ? 'bg-orange-400 scale-110' : 'bg-white/40'}`}
+                />
+              ))}
+            </div>
           </div>
-          <div className="flex gap-2 mt-8">
-            {heroSlides.map((_, idx) => (
-              <button
-                key={idx}
-                onClick={() => setCurrentHero(idx)}
-                className={`w-3 h-3 rounded-full transition-all ${currentHero === idx ? 'bg-white scale-110' : 'bg-white/40'}`}
-              />
-            ))}
-          </div>
+          {heroTiles.length > 0 && (
+            <div className="hidden md:grid grid-cols-2 gap-4">
+              {heroTiles.map((p, i) => {
+                const img = p.images.find((x) => x.is_primary) || p.images[0];
+                return (
+                  <Link
+                    key={p.id}
+                    to={`/product/${p.slug}`}
+                    className={`relative block aspect-[4/5] overflow-hidden rounded-2xl bg-teal-900 ${i % 2 === 1 ? 'translate-y-8' : ''}`}
+                  >
+                    <img src={img.url} alt={p.title} className="h-full w-full object-cover" />
+                    <span className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-3 text-sm font-semibold">
+                      {formatPrice(p.price, p.currency)}
+                    </span>
+                  </Link>
+                );
+              })}
+            </div>
+          )}
         </div>
+        <div className="faso-band" aria-hidden="true" />
       </section>
 
       {/* Categories */}
@@ -232,8 +256,8 @@ export function HomePage() {
                 to={`/category/${cat.slug}`}
                 className="flex flex-col items-center gap-2 p-4 rounded-xl bg-slate-50 hover:bg-teal-50 border border-slate-100 hover:border-teal-200 transition-all group"
               >
-                <div className="w-12 h-12 rounded-full bg-teal-100 text-teal-600 flex items-center justify-center group-hover:bg-teal-600 group-hover:text-white transition-colors">
-                  {cat.icon && categoryIcons[cat.icon] ? categoryIcons[cat.icon] : <ShoppingCart className="w-6 h-6" />}
+                <div className="w-12 h-12 rounded-full overflow-hidden bg-teal-100 text-teal-600 flex items-center justify-center group-hover:bg-teal-600 group-hover:text-white transition-colors">
+                  {cat.image_url ? <img src={cat.image_url} alt="" className="w-full h-full object-cover" /> : cat.icon && categoryIcons[cat.icon] ? categoryIcons[cat.icon] : <ShoppingCart className="w-6 h-6" />}
                 </div>
                 <span className="text-xs font-medium text-slate-700 text-center line-clamp-2">{cat.name}</span>
               </Link>
@@ -316,7 +340,7 @@ export function HomePage() {
       )}
 
       {/* CTA Section */}
-      <section className="py-16 bg-slate-900">
+      <section className="py-16 bg-teal-900">
         <div className="page-container text-center">
           <h2 className="text-3xl font-bold text-white mb-4">Vendez vos produits sur BF RAAGA</h2>
           <p className="text-lg text-slate-400 max-w-2xl mx-auto mb-8">

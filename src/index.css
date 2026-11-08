@@ -4,13 +4,13 @@
 
 @layer base {
   :root {
-    --color-primary: #0f766e;
-    --color-primary-light: #14b8a6;
-    --color-primary-dark: #0d5b56;
-    --color-secondary: #f97316;
-    --color-secondary-light: #fb923c;
-    --color-accent: #1e40af;
-    --color-success: #22c55e;
+    --color-primary: #059669;
+    --color-primary-light: #10b981;
+    --color-primary-dark: #047857;
+    --color-secondary: #f59e0b;
+    --color-secondary-light: #fbbf24;
+    --color-accent: #2563eb;
+    --color-success: #10b981;
     --color-warning: #f59e0b;
     --color-error: #ef4444;
     --color-neutral-50: #f8fafc;
@@ -25,32 +25,39 @@
     --color-neutral-900: #0f172a;
   }
 
+  h1, h2, h3, h4 {
+    font-family: 'Outfit', 'Plus Jakarta Sans', ui-sans-serif, sans-serif;
+    letter-spacing: -0.02em;
+  }
+
   body {
-    @apply bg-slate-50 text-slate-900 antialiased;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    @apply bg-slate-50/80 text-slate-900 antialiased;
+    font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
   }
 }
 
 @layer components {
   .btn-primary {
-    @apply inline-flex items-center justify-center px-4 py-2.5 rounded-lg font-medium text-white transition-all duration-200;
+    @apply inline-flex items-center justify-center px-5 py-2.5 rounded-xl font-semibold text-white shadow-sm transition-all duration-200 active:scale-[0.98];
     background-color: var(--color-primary);
   }
   .btn-primary:hover {
     background-color: var(--color-primary-dark);
+    box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25);
     transform: translateY(-1px);
   }
   .btn-secondary {
-    @apply inline-flex items-center justify-center px-4 py-2.5 rounded-lg font-medium transition-all duration-200;
+    @apply inline-flex items-center justify-center px-5 py-2.5 rounded-xl font-semibold transition-all duration-200 active:scale-[0.98];
     background-color: var(--color-secondary);
-    color: white;
+    color: #451a03;
   }
   .btn-secondary:hover {
     background-color: var(--color-secondary-light);
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.25);
     transform: translateY(-1px);
   }
   .btn-outline {
-    @apply inline-flex items-center justify-center px-4 py-2.5 rounded-lg font-medium border-2 transition-all duration-200;
+    @apply inline-flex items-center justify-center px-5 py-2.5 rounded-xl font-semibold border-2 transition-all duration-200;
     border-color: var(--color-primary);
     color: var(--color-primary);
   }
@@ -58,19 +65,21 @@
     background-color: var(--color-primary);
     color: white;
   }
+  /* Bande inspirée du Faso Dan Fani (cotonnade tissée) */
+  .faso-band {
+    height: 6px;
+    background: repeating-linear-gradient(90deg, #059669 0 24px, #f59e0b 24px 28px, #dc2626 28px 42px, #f59e0b 42px 46px, #ffffff 46px 50px);
+  }
   .card {
-    @apply bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden;
-    transition: box-shadow 0.2s ease, transform 0.2s ease;
+    @apply bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   }
   .card:hover {
-    @apply shadow-md;
-    transform: translateY(-2px);
+    @apply shadow-md border-slate-200/80;
+    transform: translateY(-3px);
   }
   .input-field {
-    @apply w-full px-4 py-3 rounded-lg border border-slate-300 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all;
-  }
-  .input-field:focus {
-    border-color: var(--color-primary);
+    @apply w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 transition-all;
   }
   .page-container {
     @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;

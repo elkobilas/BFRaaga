@@ -21,7 +21,14 @@ export function LoginPage() {
     setIsLoading(true);
     const { error } = await signIn(email, password);
     if (error) {
-      setError('Email ou mot de passe incorrect');
+      const msg = error.message.toLowerCase();
+      if (msg.includes('not confirmed')) {
+        setError("Email non confirmé : clique sur le lien reçu par e-mail.");
+      } else if (msg.includes('invalid login')) {
+        setError('Email ou mot de passe incorrect');
+      } else {
+        setError(`Erreur de connexion : ${error.message}`);
+      }
     } else {
       navigate(from, { replace: true });
     }

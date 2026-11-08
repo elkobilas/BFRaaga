@@ -1,30 +1,29 @@
 import { Link } from 'react-router-dom';
-import { Store, Mail, Phone, MapPin, Facebook, Instagram, Twitter } from 'lucide-react';
+import { Logo } from './Logo';
+import { Mail, Phone, MapPin, Facebook, Instagram, Twitter } from 'lucide-react';
 
 export function Footer() {
   return (
-    <footer className="bg-slate-900 text-slate-300">
+    <footer className="bg-teal-900 text-slate-300">
+      <div className="faso-band" aria-hidden="true" />
       <div className="page-container py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Brand */}
           <div>
             <Link to="/" className="flex items-center gap-2 mb-4">
-              <div className="w-8 h-8 rounded-lg bg-teal-600 flex items-center justify-center">
-                <Store className="w-5 h-5 text-white" />
-              </div>
-              <span className="text-xl font-bold text-white">BF RAAGA</span>
+              <Logo light />
             </Link>
             <p className="text-sm text-slate-400 mb-4">
               La marketplace locale du Burkina Faso. Achetez et vendez des produits et services en toute confiance.
             </p>
             <div className="flex gap-3">
-              <a href="#" className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center hover:bg-teal-600 transition-colors">
+              <a href="#" className="w-8 h-8 rounded-full bg-teal-800 flex items-center justify-center hover:bg-teal-600 transition-colors">
                 <Facebook className="w-4 h-4" />
               </a>
-              <a href="#" className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center hover:bg-teal-600 transition-colors">
+              <a href="#" className="w-8 h-8 rounded-full bg-teal-800 flex items-center justify-center hover:bg-teal-600 transition-colors">
                 <Instagram className="w-4 h-4" />
               </a>
-              <a href="#" className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center hover:bg-teal-600 transition-colors">
+              <a href="#" className="w-8 h-8 rounded-full bg-teal-800 flex items-center justify-center hover:bg-teal-600 transition-colors">
                 <Twitter className="w-4 h-4" />
               </a>
             </div>
@@ -35,8 +34,8 @@ export function Footer() {
             <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">Liens rapides</h3>
             <ul className="space-y-2">
               <li><Link to="/search" className="text-sm hover:text-teal-400 transition-colors">Tous les produits</Link></li>
-              <li><Link to="/" className="text-sm hover:text-teal-400 transition-colors">Nouveautés</Link></li>
-              <li><Link to="/" className="text-sm hover:text-teal-400 transition-colors">Promotions</Link></li>
+              <li><Link to="/search" className="text-sm hover:text-teal-400 transition-colors">Nouveautés</Link></li>
+              <li><Link to="/search" className="text-sm hover:text-teal-400 transition-colors">Promotions</Link></li>
               <li><Link to="/how-to-sell" className="text-sm hover:text-teal-400 transition-colors">Vendre sur BF RAAGA</Link></li>
             </ul>
           </div>
@@ -73,8 +72,8 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-slate-800 mt-10 pt-6 text-center text-sm text-slate-500">
-          <p> BF RAAGA. Tous droits réservés.</p>
+        <div className="border-t border-teal-800 mt-10 pt-6 text-center text-sm text-slate-500">
+          <p>© {new Date().getFullYear()} BF RAAGA. Tous droits réservés.</p>
         </div>
       </div>
     </footer>

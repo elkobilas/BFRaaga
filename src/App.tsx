@@ -45,7 +45,7 @@ function App() {
               <Route path="login" element={<LoginPage />} />
               <Route path="register" element={<RegisterPage />} />
               <Route path="account" element={<ProtectedRoute><AccountPage /></ProtectedRoute>} />
-              <Route path="seller/*" element={<ProtectedRoute sellerOnly><SellerDashboard /></ProtectedRoute>} />
+              <Route path="seller/*" element={<ProtectedRoute><SellerDashboard /></ProtectedRoute>} />
               <Route path="admin/*" element={<ProtectedRoute adminOnly><AdminDashboard /></ProtectedRoute>} />
             </Route>
           </Routes>

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useCart } from '../contexts/CartContext';
+import { Logo } from './Logo';
 import {
   Search,
   ShoppingCart,
@@ -32,15 +33,12 @@ export function Navbar() {
   };
 
   return (
-    <header className="sticky top-0 z-50 bg-white border-b border-slate-200 shadow-sm">
+    <header className="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-slate-200">
       <div className="page-container">
         <div className="flex items-center justify-between h-16 gap-4">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2 shrink-0">
-            <div className="w-8 h-8 rounded-lg bg-teal-600 flex items-center justify-center">
-              <Store className="w-5 h-5 text-white" />
-            </div>
-            <span className="text-xl font-bold text-teal-700 hidden sm:block">BF RAAGA</span>
+            <Logo />
           </Link>
 
           {/* Search */}
@@ -59,6 +57,15 @@ export function Navbar() {
 
           {/* Actions */}
           <div className="flex items-center gap-2 sm:gap-3">
+            {/* Vendre / Ouvrir boutique button */}
+            <Link
+              to={isSeller ? "/seller" : "/seller/settings"}
+              className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200 transition-colors"
+            >
+              <Store className="w-3.5 h-3.5" />
+              {isSeller ? "Mon espace vendeur" : "Vendre sur BF RAAGA"}
+            </Link>
+
             {/* Mobile search toggle */}
             <button
               className="md:hidden p-2 rounded-lg hover:bg-slate-100"
@@ -71,7 +78,7 @@ export function Navbar() {
             <Link to="/cart" className="relative p-2 rounded-lg hover:bg-slate-100 transition-colors">
               <ShoppingCart className="w-5 h-5 text-slate-600" />
               {itemCount > 0 && (
-                <span className="absolute -top-0.5 -right-0.5 w-5 h-5 flex items-center justify-center bg-orange-500 text-white text-xs font-bold rounded-full">
+                <span className="absolute -top-0.5 -right-0.5 w-5 h-5 flex items-center justify-center bg-orange-400 text-teal-900 text-xs font-bold rounded-full">
                   {itemCount}
                 </span>
               )}
@@ -122,14 +129,23 @@ export function Navbar() {
                         Favoris
                       </Link>
 
-                      {isSeller && (
+                      {isSeller ? (
                         <Link
                           to="/seller"
                           className="flex items-center gap-3 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50"
                           onClick={() => setIsUserMenuOpen(false)}
                         >
-                          <Store className="w-4 h-4" />
+                          <Store className="w-4 h-4 text-emerald-600" />
                           Espace vendeur
+                        </Link>
+                      ) : (
+                        <Link
+                          to="/seller/settings"
+                          className="flex items-center gap-3 px-4 py-2 text-sm text-emerald-700 hover:bg-emerald-50 font-medium"
+                          onClick={() => setIsUserMenuOpen(false)}
+                        >
+                          <Store className="w-4 h-4 text-emerald-600" />
+                          Ouvrir ma boutique
                         </Link>
                       )}
 
@@ -217,9 +233,13 @@ export function Navbar() {
                   <Link to="/account" className="block px-3 py-2 rounded-lg text-slate-700 hover:bg-slate-50" onClick={() => setIsMenuOpen(false)}>
                     Mon compte
                   </Link>
-                  {isSeller && (
+                  {isSeller ? (
                     <Link to="/seller" className="block px-3 py-2 rounded-lg text-slate-700 hover:bg-slate-50" onClick={() => setIsMenuOpen(false)}>
                       Espace vendeur
+                    </Link>
+                  ) : (
+                    <Link to="/seller/settings" className="block px-3 py-2 rounded-lg text-emerald-700 font-medium hover:bg-emerald-50" onClick={() => setIsMenuOpen(false)}>
+                      Ouvrir ma boutique
                     </Link>
                   )}
                   {isAdmin && (
