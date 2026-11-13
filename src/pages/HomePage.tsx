@@ -62,14 +62,14 @@ function ProductCard({ product }: { product: Product }) {
   };
 
   return (
-    <div className="card group">
+    <div className="card group hover:shadow-xl transition-all duration-300 border-slate-100 flex flex-col justify-between">
       <Link to={`/product/${product.slug}`} className="block relative">
-        <div className="aspect-square bg-slate-100 overflow-hidden relative">
+        <div className="aspect-square bg-slate-50 overflow-hidden relative rounded-t-2xl">
           {primaryImage ? (
             <img
               src={primaryImage.url}
               alt={product.title}
-              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
             />
           ) : (
             <div className="w-full h-full flex items-center justify-center text-slate-300">
@@ -77,38 +77,42 @@ function ProductCard({ product }: { product: Product }) {
             </div>
           )}
           {product.condition === 'used' && (
-            <span className="absolute top-2 left-2 bg-amber-500 text-white text-xs font-medium px-2 py-1 rounded">
+            <span className="absolute top-2.5 left-2.5 bg-amber-500/95 backdrop-blur text-white text-[11px] font-bold px-2 py-0.5 rounded-md shadow-sm">
               Occasion
             </span>
           )}
           {product.compare_price && product.compare_price > product.price && (
-            <span className="absolute top-2 right-2 bg-red-500 text-white text-xs font-medium px-2 py-1 rounded">
-              Promo
+            <span className="absolute top-2.5 right-2.5 bg-red-600/95 backdrop-blur text-white text-[11px] font-bold px-2 py-0.5 rounded-md shadow-sm">
+              -{Math.round(((product.compare_price - product.price) / product.compare_price) * 100)}%
             </span>
           )}
         </div>
       </Link>
-      <div className="p-4">
-        <div className="flex items-start justify-between gap-2 mb-1">
-          <p className="text-xs text-teal-600 font-medium">{product.category?.name}</p>
-          <div className="flex items-center gap-1 text-amber-500">
-            <Star className="w-3 h-3 fill-current" />
-            <span className="text-xs font-medium">{product.rating.toFixed(1)}</span>
+      <div className="p-4 flex flex-col flex-1 justify-between">
+        <div>
+          <div className="flex items-center justify-between gap-2 mb-1.5">
+            <span className="text-[11px] uppercase tracking-wider font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded">
+              {product.category?.name || 'Général'}
+            </span>
+            <div className="flex items-center gap-1 text-amber-500 bg-amber-50 px-1.5 py-0.5 rounded text-xs font-semibold">
+              <Star className="w-3 h-3 fill-current" />
+              <span>{product.rating.toFixed(1)}</span>
+            </div>
           </div>
+          <Link to={`/product/${product.slug}`} className="block">
+            <h3 className="text-sm font-semibold text-slate-900 line-clamp-2 mb-1 group-hover:text-emerald-700 transition-colors">
+              {product.title}
+            </h3>
+          </Link>
+          <p className="text-xs text-slate-500 mb-3">
+            Boutique : <Link to={`/seller/${product.seller?.slug}`} className="text-slate-700 font-medium hover:text-emerald-700 hover:underline">{product.seller?.business_name}</Link>
+          </p>
         </div>
-        <Link to={`/product/${product.slug}`} className="block">
-          <h3 className="text-sm font-medium text-slate-900 line-clamp-2 mb-1 hover:text-teal-600 transition-colors">
-            {product.title}
-          </h3>
-        </Link>
-        <p className="text-xs text-slate-500 mb-2">
-          Par <Link to={`/seller/${product.seller?.slug}`} className="text-teal-600 hover:underline">{product.seller?.business_name}</Link>
-        </p>
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between pt-2 border-t border-slate-100">
           <div>
-            <span className="text-lg font-bold text-slate-900">{formatPrice(product.price, product.currency)}</span>
+            <span className="text-lg font-black text-slate-900 tracking-tight">{formatPrice(product.price, product.currency)}</span>
             {product.compare_price && product.compare_price > product.price && (
-              <span className="text-sm text-slate-400 line-through ml-2">
+              <span className="text-xs text-slate-400 line-through block font-medium">
                 {formatPrice(product.compare_price, product.currency)}
               </span>
             )}
@@ -116,7 +120,8 @@ function ProductCard({ product }: { product: Product }) {
           <button
             onClick={handleAddToCart}
             disabled={isAdding}
-            className="p-2 rounded-lg bg-teal-50 text-teal-600 hover:bg-teal-600 hover:text-white transition-colors disabled:opacity-50"
+            className="p-2.5 rounded-xl bg-emerald-50 text-emerald-700 hover:bg-emerald-600 hover:text-white transition-all shadow-sm active:scale-95 disabled:opacity-50"
+            title="Ajouter au panier"
           >
             <ShoppingCart className="w-4 h-4" />
           </button>
@@ -196,28 +201,37 @@ export function HomePage() {
   return (
     <div>
       {/* Hero */}
-      <section className="relative bg-teal-800 text-white overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_85%_0%,rgba(242,176,30,0.22),transparent_55%)]" aria-hidden="true" />
-        <div className="page-container relative grid md:grid-cols-2 gap-12 items-center py-14 md:py-24">
+      <section className="relative bg-gradient-to-br from-emerald-900 via-emerald-800 to-slate-900 text-white overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_80%_20%,rgba(245,158,11,0.2),transparent_60%)]" aria-hidden="true" />
+        <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="page-container relative grid md:grid-cols-2 gap-12 items-center py-16 md:py-24">
           <div>
-            <h1 className="font-display text-4xl md:text-6xl font-extrabold leading-[1.02] mb-5 text-balance">{heroSlides[currentHero].title}</h1>
-            <p className="text-lg text-white/80 mb-8 max-w-md">{heroSlides[currentHero].subtitle}</p>
-            <div className="flex flex-wrap gap-3">
-              <Link to="/search" className="btn-secondary text-base px-6 py-3">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/20 text-emerald-200 border border-emerald-400/30 text-xs font-semibold mb-6">
+              <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
+              Place de marché 100% burkinabè
+            </div>
+            <h1 className="font-display text-4xl sm:text-5xl md:text-6xl font-black tracking-tight leading-[1.08] mb-6 text-balance">
+              {heroSlides[currentHero].title}
+            </h1>
+            <p className="text-lg text-emerald-100/80 mb-8 max-w-lg leading-relaxed">
+              {heroSlides[currentHero].subtitle}
+            </p>
+            <div className="flex flex-wrap gap-4 items-center">
+              <Link to="/search" className="btn-secondary text-base px-7 py-3.5 shadow-lg shadow-amber-500/20 hover:shadow-amber-500/30">
                 {heroSlides[currentHero].cta}
                 <ArrowRight className="w-5 h-5 ml-2" />
               </Link>
-              <Link to="/register" className="inline-flex items-center px-6 py-3 rounded-lg font-medium text-white border-2 border-white/30 hover:bg-white/10 transition-all">
-                S'inscrire
+              <Link to="/seller/settings" className="inline-flex items-center px-6 py-3.5 rounded-xl font-semibold text-white bg-white/10 hover:bg-white/20 border border-white/20 transition-all backdrop-blur">
+                Ouvrir ma boutique
               </Link>
             </div>
-            <div className="flex gap-2 mt-8">
+            <div className="flex gap-2.5 mt-10">
               {heroSlides.map((_, idx) => (
                 <button
                   key={idx}
                   aria-label={`Diapositive ${idx + 1}`}
                   onClick={() => setCurrentHero(idx)}
-                  className={`w-3 h-3 rounded-full transition-all ${currentHero === idx ? 'bg-orange-400 scale-110' : 'bg-white/40'}`}
+                  className={`h-2 rounded-full transition-all duration-300 ${currentHero === idx ? 'w-8 bg-amber-400' : 'w-2 bg-white/30'}`}
                 />
               ))}
             </div>
@@ -246,20 +260,36 @@ export function HomePage() {
       </section>
 
       {/* Categories */}
-      <section className="py-12 bg-white">
+      <section className="py-14 bg-white border-b border-slate-100">
         <div className="page-container">
-          <h2 className="text-2xl font-bold text-slate-900 mb-6">Parcourir par catégorie</h2>
+          <div className="flex items-center justify-between mb-8">
+            <div>
+              <h2 className="text-2xl font-black text-slate-900 tracking-tight">Catégories populaires</h2>
+              <p className="text-sm text-slate-500 mt-1">Découvrez tous les rayons disponibles près de chez vous</p>
+            </div>
+            <Link to="/search" className="text-sm font-semibold text-emerald-700 hover:text-emerald-800 flex items-center gap-1 group">
+              Toutes les catégories <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </Link>
+          </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-10 gap-3">
             {categories.map((cat) => (
               <Link
                 key={cat.id}
                 to={`/category/${cat.slug}`}
-                className="flex flex-col items-center gap-2 p-4 rounded-xl bg-slate-50 hover:bg-teal-50 border border-slate-100 hover:border-teal-200 transition-all group"
+                className="flex flex-col items-center gap-2.5 p-4 rounded-2xl bg-slate-50/70 hover:bg-emerald-50/70 border border-slate-100 hover:border-emerald-200 transition-all group hover:-translate-y-1 hover:shadow-sm"
               >
-                <div className="w-12 h-12 rounded-full overflow-hidden bg-teal-100 text-teal-600 flex items-center justify-center group-hover:bg-teal-600 group-hover:text-white transition-colors">
-                  {cat.image_url ? <img src={cat.image_url} alt="" className="w-full h-full object-cover" /> : cat.icon && categoryIcons[cat.icon] ? categoryIcons[cat.icon] : <ShoppingCart className="w-6 h-6" />}
+                <div className="w-13 h-13 rounded-2xl bg-white shadow-sm border border-slate-100 text-emerald-700 flex items-center justify-center group-hover:bg-emerald-600 group-hover:text-white transition-all duration-300">
+                  {cat.image_url ? (
+                    <img src={cat.image_url} alt="" className="w-full h-full object-cover rounded-2xl" />
+                  ) : cat.icon && categoryIcons[cat.icon] ? (
+                    categoryIcons[cat.icon]
+                  ) : (
+                    <ShoppingCart className="w-5 h-5" />
+                  )}
                 </div>
-                <span className="text-xs font-medium text-slate-700 text-center line-clamp-2">{cat.name}</span>
+                <span className="text-xs font-semibold text-slate-700 group-hover:text-emerald-900 text-center line-clamp-2">
+                  {cat.name}
+                </span>
               </Link>
             ))}
           </div>
@@ -267,34 +297,34 @@ export function HomePage() {
       </section>
 
       {/* Features */}
-      <section className="py-10 bg-slate-50">
+      <section className="py-12 bg-slate-50/60">
         <div className="page-container">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="flex items-start gap-4 p-5 bg-white rounded-xl border border-slate-100">
-              <div className="w-12 h-12 rounded-full bg-teal-100 text-teal-600 flex items-center justify-center shrink-0">
+            <div className="flex items-start gap-4 p-6 bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+              <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 border border-emerald-100">
                 <Shield className="w-6 h-6" />
               </div>
               <div>
-                <h3 className="font-semibold text-slate-900">Paiement sécurisé</h3>
-                <p className="text-sm text-slate-500 mt-1">Paiements via Mobile Money et vérification des vendeurs.</p>
+                <h3 className="font-bold text-slate-900 text-base">Paiement 100% sécurisé</h3>
+                <p className="text-sm text-slate-500 mt-1 leading-relaxed">Transactions protégées par Mobile Money (Orange Money, Moov) et vendeurs vérifiés.</p>
               </div>
             </div>
-            <div className="flex items-start gap-4 p-5 bg-white rounded-xl border border-slate-100">
-              <div className="w-12 h-12 rounded-full bg-teal-100 text-teal-600 flex items-center justify-center shrink-0">
+            <div className="flex items-start gap-4 p-6 bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+              <div className="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center shrink-0 border border-amber-100">
                 <Truck className="w-6 h-6" />
               </div>
               <div>
-                <h3 className="font-semibold text-slate-900">Livraison locale</h3>
-                <p className="text-sm text-slate-500 mt-1">Livraison à domicile ou retrait en point relais à Ouagadougou.</p>
+                <h3 className="font-bold text-slate-900 text-base">Livraison locale rapide</h3>
+                <p className="text-sm text-slate-500 mt-1 leading-relaxed">Livraison directe à domicile ou retrait immédiat en boutique à Ouagadougou et Bobo.</p>
               </div>
             </div>
-            <div className="flex items-start gap-4 p-5 bg-white rounded-xl border border-slate-100">
-              <div className="w-12 h-12 rounded-full bg-teal-100 text-teal-600 flex items-center justify-center shrink-0">
+            <div className="flex items-start gap-4 p-6 bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+              <div className="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 border border-blue-100">
                 <Headphones className="w-6 h-6" />
               </div>
               <div>
-                <h3 className="font-semibold text-slate-900">Support client</h3>
-                <p className="text-sm text-slate-500 mt-1">Notre équipe locale vous accompagne à chaque étape.</p>
+                <h3 className="font-bold text-slate-900 text-base">Service client réactif</h3>
+                <p className="text-sm text-slate-500 mt-1 leading-relaxed">Une assistance burkinabè joignable directement par téléphone et WhatsApp.</p>
               </div>
             </div>
           </div>
@@ -303,15 +333,18 @@ export function HomePage() {
 
       {/* Featured Products */}
       {featuredProducts.length > 0 && (
-        <section className="py-12">
+        <section className="py-14 bg-slate-50/40">
           <div className="page-container">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold text-slate-900">Produits en vedette</h2>
-              <Link to="/search" className="text-sm text-teal-600 font-medium hover:text-teal-700 flex items-center gap-1">
-                Voir tout <ArrowRight className="w-4 h-4" />
+            <div className="flex items-center justify-between mb-8">
+              <div>
+                <h2 className="text-2xl font-black text-slate-900 tracking-tight">Produits en vedette</h2>
+                <p className="text-sm text-slate-500 mt-1">Sélection des meilleures offres du moment</p>
+              </div>
+              <Link to="/search?featured=true" className="text-sm font-semibold text-emerald-700 hover:text-emerald-800 flex items-center gap-1 group">
+                Voir tout le catalogue <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Link>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {featuredProducts.map((product) => (
                 <ProductCard key={product.id} product={product} />
               ))}
@@ -322,15 +355,18 @@ export function HomePage() {
 
       {/* New Products */}
       {newProducts.length > 0 && (
-        <section className="py-12 bg-white">
+        <section className="py-14 bg-white border-t border-slate-100">
           <div className="page-container">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold text-slate-900">Nouveautés</h2>
-              <Link to="/search" className="text-sm text-teal-600 font-medium hover:text-teal-700 flex items-center gap-1">
-                Voir tout <ArrowRight className="w-4 h-4" />
+            <div className="flex items-center justify-between mb-8">
+              <div>
+                <h2 className="text-2xl font-black text-slate-900 tracking-tight">Derniers arrivages</h2>
+                <p className="text-sm text-slate-500 mt-1">Articles ajoutés récemment par nos vendeurs</p>
+              </div>
+              <Link to="/search" className="text-sm font-semibold text-emerald-700 hover:text-emerald-800 flex items-center gap-1 group">
+                Explorer les nouveautés <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Link>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {newProducts.map((product) => (
                 <ProductCard key={product.id} product={product} />
               ))}
@@ -340,16 +376,27 @@ export function HomePage() {
       )}
 
       {/* CTA Section */}
-      <section className="py-16 bg-teal-900">
-        <div className="page-container text-center">
-          <h2 className="text-3xl font-bold text-white mb-4">Vendez vos produits sur BF RAAGA</h2>
-          <p className="text-lg text-slate-400 max-w-2xl mx-auto mb-8">
-            Rejoignez des centaines de vendeurs au Burkina Faso. Créez votre boutique en quelques minutes et commencez à vendre.
+      <section className="py-20 relative overflow-hidden bg-gradient-to-r from-emerald-950 via-emerald-900 to-slate-950">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_0%,rgba(245,158,11,0.15),transparent_70%)]" aria-hidden="true" />
+        <div className="page-container relative text-center">
+          <span className="inline-block px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-semibold mb-4 border border-emerald-500/30">
+            Rejoignez l'aventure BF RAAGA
+          </span>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white mb-5 tracking-tight">
+            Vous avez des produits ou services à vendre ?
+          </h2>
+          <p className="text-base sm:text-lg text-emerald-100/75 max-w-2xl mx-auto mb-10 leading-relaxed">
+            Créez votre vitrine en moins de 3 minutes. Encaissez vos ventes directement par Mobile Money et développez votre clientèle au Burkina Faso.
           </p>
-          <Link to="/register" className="btn-secondary text-base px-8 py-3">
-            Devenir vendeur
-            <TrendingUp className="w-5 h-5 ml-2" />
-          </Link>
+          <div className="flex flex-wrap gap-4 justify-center">
+            <Link to="/seller/settings" className="btn-secondary text-base px-8 py-4 shadow-xl shadow-amber-500/20">
+              Ouvrir ma boutique gratuitement
+              <TrendingUp className="w-5 h-5 ml-2" />
+            </Link>
+            <Link to="/how-to-sell" className="inline-flex items-center px-6 py-4 rounded-xl font-semibold text-white bg-white/10 hover:bg-white/20 border border-white/20 backdrop-blur transition-all">
+              Comment ça marche ?
+            </Link>
+          </div>
         </div>
       </section>
     </div>

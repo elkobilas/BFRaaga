@@ -79,3 +79,4 @@ CREATE POLICY "reviews_insert_own"
   ON public.reviews FOR INSERT
   TO authenticated
   WITH CHECK ((SELECT auth.uid()) = user_id);
+

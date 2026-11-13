@@ -44,3 +44,4 @@ Ce document formalise l'application des méthodologies et standards du framework
 
 - Toute modification de schéma doit être idempotente (`IF EXISTS`, `ON CONFLICT DO NOTHING`).
 - L'historique des migrations SQL est numéroté séquentiellement dans `supabase/migrations/` et synchronisé via `supabase db push` ou le SQL Editor Supabase.
+
